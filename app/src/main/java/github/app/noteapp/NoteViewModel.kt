@@ -4,13 +4,17 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import github.app.noteapp.data.NoteDao
 import github.app.noteapp.data.NoteDatabase
 import github.app.noteapp.data.NoteRepo
 
-class NoteViewModel(application: Application) :AndroidViewModel(application) {
-    private val allNotes : LiveData<List<Note>>
+class NoteViewModel(application: Application) :ViewModel() {
+
+
+
+    val allNotes : LiveData<List<Note>>
     private val repo : NoteRepo
 
     init {
