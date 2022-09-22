@@ -61,4 +61,14 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     // To use constraint layout in compose
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    kapt "androidx.lifecycle:lifecycle-compiler:2.5.1"
+
+    implementation "androidx.room:room-runtime:2.4.3"
+    kapt "androidx.room:room-compiler:2.4.3"
+
+
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
 }

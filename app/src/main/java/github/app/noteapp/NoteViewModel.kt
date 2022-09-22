@@ -4,23 +4,18 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import github.app.noteapp.data.NoteDao
 import github.app.noteapp.data.NoteDatabase
 import github.app.noteapp.data.NoteRepo
 
-class NoteViewModel(application: Application) :ViewModel() {
+class NoteViewModel(application: Application) :AndroidViewModel(application) {
 
-
-
-    val allNotes : LiveData<List<Note>>
+    val listNote : LiveData<List<Note>>
     private val repo : NoteRepo
 
     init {
-        val dao = NoteDatabase.getDatabase(application).getNoteDAO()
+        val dao = NoteDatabase.getDatabase(application).getNotesDao()
         repo= NoteRepo(dao)
-        allNotes = repo.allNotes
+        listNote = repo.listNote
     }
 
     fun insertNote(note: Note) :Boolean {
@@ -33,12 +28,12 @@ class NoteViewModel(application: Application) :ViewModel() {
         }
     }
 
-    fun updateNote(note: Note)  :Boolean{
+    fun updateNote(note: Note) :Boolean{
         return try {
             repo.update(note)
             true
         } catch (e: Exception) {
-            Log.e("Lỗi thêm dữ liệu: ", e.message!!)
+            Log.e("Lỗi sửa dữ liệu: ", e.message!!)
             false
         }
     }
@@ -47,7 +42,7 @@ class NoteViewModel(application: Application) :ViewModel() {
             repo.delete(note)
             true
         } catch (e: Exception) {
-            Log.e("Lỗi thêm dữ liệu: ", e.message!!)
+            Log.e("Lỗi xóa dữ liệu: ", e.message!!)
             false
         }
     }

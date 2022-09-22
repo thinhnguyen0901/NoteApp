@@ -1,7 +1,7 @@
 package github.app.noteapp.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import github.app.noteapp.Note
 import github.app.noteapp.NoteViewModel
-import github.app.noteapp.R
 import github.app.noteapp.contract.DeleteNoteContract
 import github.app.noteapp.contract.ClickNoteContract
 import github.app.noteapp.databinding.ActivityMainBinding
 import github.app.noteapp.ui.adapter.NoteAdapter
 import github.app.noteapp.ui.fragment.AddEditFragment
+
 
 class MainActivity : AppCompatActivity(), DeleteNoteContract, ClickNoteContract {
 
@@ -27,6 +27,22 @@ class MainActivity : AppCompatActivity(), DeleteNoteContract, ClickNoteContract 
         setContentView(binding.root)
 
         initView()
+        addEvent()
+    }
+
+    private fun addEvent() {
+        //open form to add note
+        binding.idFAB.setOnClickListener {
+            val myFragment = AddEditFragment()
+            supportFragmentManager.beginTransaction()
+                .add(
+                    binding.fragmentContainer.id,
+                    myFragment,
+                    AddEditFragment::class.java.simpleName
+                )
+                .commit()
+            binding.idFAB.visibility = View.GONE
+        }
     }
 
     private fun initView() {
@@ -40,19 +56,15 @@ class MainActivity : AppCompatActivity(), DeleteNoteContract, ClickNoteContract 
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         )[NoteViewModel::class.java]
 
-        viewModel.allNotes.observe(this, Observer { list ->
+        viewModel.listNote.observe(this, Observer { list ->
             list?.let {
                 noteAdapter.updateList(it)
             }
         })
-        binding.idFAB.setOnClickListener {
-            val intent = Intent(this, AddEditFragment::class.java)
-            startActivity(intent)
-            this.finish()
-        }
     }
 
     override fun onClickNote(note: Note) {
+
         val fragment = AddEditFragment()
         val bundle = Bundle()
         bundle.putString("noteType", "Edit")
@@ -62,8 +74,9 @@ class MainActivity : AppCompatActivity(), DeleteNoteContract, ClickNoteContract 
         fragment.arguments = bundle
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
+        transaction.replace(binding.fragmentContainer.id, fragment)
         transaction.commit()
+        binding.idFAB.visibility = View.GONE
     }
 
     override fun onDeleteNote(note: Note) {
