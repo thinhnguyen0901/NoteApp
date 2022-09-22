@@ -48,9 +48,10 @@ class AddEditFragment : Fragment() {
             noteType = ""
 
         viewModel = ViewModelProvider(this)[NoteViewModel::class.java]
-        if (noteType.equals("Edit")) {
+        if (noteType == "Edit") {
             val noteTitle = bundle.getString("noteTitle")
             val noteDescription = bundle.getString("noteDescription")
+            noteID = bundle.getInt("noteId", -1)
             binding.idEdtNoteName.setText(noteTitle)
             binding.idEdtNoteDesc.setText(noteDescription)
             binding.idBtn.text = "Update Note"
@@ -80,8 +81,10 @@ class AddEditFragment : Fragment() {
             val currentDateAndTime: String = sdf.format(Date())
             val updatedNote = Note(noteTitle, noteDescription, currentDateAndTime)
             updatedNote.id = noteID
-            if (viewModel.updateNote(updatedNote))
+            if (viewModel.updateNote(updatedNote)) {
                 Toast.makeText(activity, "Note Updated..", Toast.LENGTH_LONG).show()
+                activity?.finish()
+            }
         }
     }
 
@@ -89,15 +92,12 @@ class AddEditFragment : Fragment() {
         if (noteTitle.isNotEmpty() && noteDescription.isNotEmpty()) {
             val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
             val currentDateAndTime: String = sdf.format(Date())
-            if (viewModel.insertNote(
-                    Note(
-                        noteTitle,
-                        noteDescription,
-                        currentDateAndTime
-                    )
-                )
-            )
+            val note = Note(noteTitle, noteDescription, currentDateAndTime)
+            if (viewModel.insertNote(note)
+            ) {
                 Toast.makeText(activity, "$noteTitle Added", Toast.LENGTH_SHORT).show()
+                activity?.finish()
+            }
         }
     }
 

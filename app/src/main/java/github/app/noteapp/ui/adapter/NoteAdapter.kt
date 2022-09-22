@@ -45,7 +45,6 @@ class NoteAdapter(
         return listNote.size
     }
 
-    // below method is use to update our list of notes.
     fun updateList(newList: List<Note>) {
         listNote.clear()
         listNote.addAll(newList)

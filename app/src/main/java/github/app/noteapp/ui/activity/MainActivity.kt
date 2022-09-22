@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), DeleteNoteContract, ClickNoteContract 
     }
 
     private fun addEvent() {
-        //open form to add note
         binding.idFAB.setOnClickListener {
             val myFragment = AddEditFragment()
             supportFragmentManager.beginTransaction()
